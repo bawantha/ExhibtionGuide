@@ -1,4 +1,6 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ExhibitionHome extends StatefulWidget {
   @override
@@ -6,6 +8,8 @@ class ExhibitionHome extends StatefulWidget {
 }
 
 class _ExhibitionHomeState extends State<ExhibitionHome> {
+  FlutterToast flutterToast;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,19 +28,52 @@ class _ExhibitionHomeState extends State<ExhibitionHome> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: EdgeInsets.all(0),
-                    textColor: Colors.white,
-                    color: Colors.grey,
-                    child: Icon(Icons.wifi),
-                    onPressed: () {},
-                    shape: CircleBorder(),
+                  Builder(
+                    builder: (BuildContext context) {
+                      return RaisedButton(
+                        padding: EdgeInsets.all(0),
+                        textColor: Colors.white,
+                        color: Colors.grey,
+                        child: Icon(Icons.wifi),
+                        onPressed: () async {
+                          print("Called");
+                          ConnectivityResult result =
+                              await Connectivity().checkConnectivity();
+                          if (result == ConnectivityResult.wifi) {
+                                Connectivity().getWifiBSSID().then((value) {
+                                  final sn = SnackBar(
+                                      content: Text(value.toString()),
+                                      action: SnackBarAction(
+                                        label: 'Okay',
+                                        onPressed: () {
+                                          // Some code to undo the change.
+                                        },
+                                      ));
+                                  Scaffold.of(context).showSnackBar(sn);
+                                });
+                          } else {
+                            final sn = SnackBar(
+                                content: Text('Please Connect To a  WIFI Router'),
+                                action: SnackBarAction(
+                                  label: 'Okay',
+                                  onPressed: () {
+                                    // Some code to undo the change.
+                                  },
+                                ));
+                            Scaffold.of(context).showSnackBar(sn);
+                          }
+                        },
+                        shape: CircleBorder(),
+                      );
+                    },
                   ),
                   RaisedButton(
                     textColor: Colors.white,
                     color: Colors.blue,
                     child: Icon(Icons.edit),
-                    onPressed: () {},
+                    onPressed: () {
+                      print("Called");
+                    },
                     shape: CircleBorder(),
                   ),
                   RaisedButton(
