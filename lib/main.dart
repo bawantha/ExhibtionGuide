@@ -1,4 +1,6 @@
+import 'package:exhibition_guide/Providers/exhibtion_home_provider.dart';
 import 'package:exhibition_guide/organizer/exhibition_home.dart';
+import 'package:exhibition_guide/organizer/hall_details.dart';
 import 'package:exhibition_guide/organizer/oraganizer_home.dart';
 import 'package:exhibition_guide/organizer/organizer_login.dart';
 import 'package:exhibition_guide/visitor/exhibition_identifier.dart';
@@ -6,6 +8,7 @@ import 'package:exhibition_guide/visitor/stall_description.dart';
 import 'package:exhibition_guide/visitor/visitor_home.dart';
 import 'package:exhibition_guide/visitor/visitor_login.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(ExhibitionGuide());
@@ -14,18 +17,22 @@ void main() {
 class ExhibitionGuide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        '/visitorLogin': (context) => VisitorLogin(),
-        '/exhibitionIdentifier': (context) => ExhibitionIdentifier(),
-        '/visitorHome': (context) => VisitorHome(),
-        '/stall': (context) => StallDescription(),
-        '/organizerLogin': (context) => OrganizerLogin(),
-        '/organizerHome': (context) => OrganizerHome(),
-        '/exhibitionHome': (context) => ExhibitionHome()
-      },
-      debugShowCheckedModeBanner: false,
-      home: OrganizerLogin(),
+    return ChangeNotifierProvider<ExhibitionHomeProvider>(
+      create: (BuildContext context) => ExhibitionHomeProvider(),
+      child: MaterialApp(
+        routes: {
+          '/visitorLogin': (context) => VisitorLogin(),
+          '/exhibitionIdentifier': (context) => ExhibitionIdentifier(),
+          '/visitorHome': (context) => VisitorHome(),
+          '/stall': (context) => StallDescription(),
+          '/organizerLogin': (context) => OrganizerLogin(),
+          '/organizerHome': (context) => OrganizerHome(),
+          '/exhibitionHome': (context) => ExhibitionHome(),
+          '/hallDetails': (context) => HallDetails(),
+        },
+        debugShowCheckedModeBanner: false,
+        home: OrganizerLogin(),
+      ),
     );
   }
 }

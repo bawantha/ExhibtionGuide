@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+
 Hall hallFromJson(String str) => Hall.fromJson(json.decode(str));
 
 String hallToJson(Hall data) => json.encode(data.toJson());
@@ -7,12 +9,12 @@ String hallToJson(Hall data) => json.encode(data.toJson());
 class Hall {
   Hall({
     this.mac,
-    this.hallName,
-    this.exhibitionId,
+    @required this.hallName,
+    @required this.exhibitionId,
     this.crowd,
   });
 
-  final String mac;
+   String mac;
   final String hallName;
   final double exhibitionId;
   int crowd=0;
