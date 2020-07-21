@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exhibition_guide/models/exhibiton_model.dart';
+import 'package:exhibition_guide/models/message.dart';
 
 abstract class DbService {
   createExhibition(String name);
@@ -9,6 +10,12 @@ abstract class DbService {
   adMac(String mac);
 
   deleteMac(String mac);
+
+  createMessage(String mac, Message message);
+
+  visitorVisited(String mac);
+
+  visitorLeaved(String mac);
 }
 
 class EGDbService implements DbService {
@@ -66,5 +73,36 @@ class EGDbService implements DbService {
     } catch (e) {
       return false;
     }
+  }
+
+  @override
+  createMessage(String mac, Message message) async {
+    try {
+//      print(mac);
+      await macCollection
+          .document(mac)
+          .collection("message")
+          .document()
+          .setData(message.toMap());
+//      print("done");
+    } catch (e) {}
+  }
+
+  @override
+  visitorLeaved(String mac) async {
+    try {
+      await macCollection
+          .document(mac)
+          .updateData({"data": FieldValue.increment(-1)});
+    } catch (e) {}
+  }
+
+  @override
+  visitorVisited(String mac) async {
+    try {
+      await macCollection
+          .document(mac)
+          .updateData({"data": FieldValue.increment(1)});
+    } catch (e) {}
   }
 }

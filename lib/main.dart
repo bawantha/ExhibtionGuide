@@ -1,4 +1,5 @@
 import 'package:exhibition_guide/Providers/exhibtion_home_provider.dart';
+import 'package:exhibition_guide/Providers/visitor_provider.dart';
 import 'package:exhibition_guide/organizer/exhibition_home.dart';
 import 'package:exhibition_guide/organizer/hall_details.dart';
 import 'package:exhibition_guide/organizer/oraganizer_home.dart';
@@ -17,8 +18,15 @@ void main() {
 class ExhibitionGuide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ExhibitionHomeProvider>(
-      create: (BuildContext context) => ExhibitionHomeProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ExhibitionHomeProvider>(
+            create: (_) => ExhibitionHomeProvider()),
+        FutureProvider<bool>(
+            create: (_) => VistorProvider().isPresmissionGranted()),
+        FutureProvider<String>(
+            create: (_) => VistorProvider().getCurrentMacAddress())
+      ],
       child: MaterialApp(
         routes: {
           '/visitorLogin': (context) => VisitorLogin(),
@@ -31,8 +39,14 @@ class ExhibitionGuide extends StatelessWidget {
           '/hallDetails': (context) => HallDetails(),
         },
         debugShowCheckedModeBanner: false,
-        home: OrganizerLogin(),
+        home: VisitorHome(),
       ),
     );
   }
 }
+
+///
+/// ChangeNotifierProvider<ExhibitionHomeProvider>(
+//      create: (BuildContext context) => ExhibitionHomeProvider(),
+//      child: ,
+//    );
