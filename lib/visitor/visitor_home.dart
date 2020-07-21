@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:exhibition_guide/services/db_service.dart';
+import 'package:exhibition_guide/services/wifi_service.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -13,6 +14,8 @@ class VisitorHome extends StatefulWidget {
 class _VisitorHomeState extends State<VisitorHome> {
   EGDbService _db = EGDbService();
 
+  String mac = "";
+
   @override
   Future<void> initState() {
     permissionGet();
@@ -23,20 +26,17 @@ class _VisitorHomeState extends State<VisitorHome> {
     return await Connectivity().getWifiBSSID();
   }
 
-  Stream<String> getStremWIFIBSD() async* {
-    while (true) {
-      String result = await Connectivity().getWifiBSSID();
-      yield result;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("ABC Exhibition"),
         actions: <Widget>[
-          Icon(Icons.notifications),
+          IconButton(
+              icon: new Icon(Icons.notifications),
+              onPressed: () {
+                Navigator.pushNamed(context, '/visitorNotificaitons');
+              }),
         ],
       ),
       body: StreamBuilder<ConnectivityResult>(

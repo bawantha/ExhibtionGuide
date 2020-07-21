@@ -8,6 +8,7 @@ import 'package:exhibition_guide/visitor/exhibition_identifier.dart';
 import 'package:exhibition_guide/visitor/stall_description.dart';
 import 'package:exhibition_guide/visitor/visitor_home.dart';
 import 'package:exhibition_guide/visitor/visitor_login.dart';
+import 'package:exhibition_guide/visitor/visitor_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,6 +38,7 @@ class ExhibitionGuide extends StatelessWidget {
           '/organizerHome': (context) => OrganizerHome(),
           '/exhibitionHome': (context) => ExhibitionHome(),
           '/hallDetails': (context) => HallDetails(),
+          '/visitorNotificaitons':(context)=>VisitorNotifications()
         },
         debugShowCheckedModeBanner: false,
         home: VisitorHome(),

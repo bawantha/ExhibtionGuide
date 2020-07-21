@@ -16,6 +16,8 @@ abstract class DbService {
   visitorVisited(String mac);
 
   visitorLeaved(String mac);
+
+  getMessages(String mac) {}
 }
 
 class EGDbService implements DbService {
@@ -103,6 +105,20 @@ class EGDbService implements DbService {
       await macCollection
           .document(mac)
           .updateData({"data": FieldValue.increment(1)});
+    } catch (e) {}
+  }
+
+  @override
+  Stream<List<Message>> getMessages(String mac) {
+    try {
+      return macCollection
+          .document(mac)
+          .collection("message")
+          .orderBy("time", descending: false)
+          .snapshots()
+          .map((event) {
+        return event.documents.map((e) => Message.fromMap(e.data)).toList();
+      });
     } catch (e) {}
   }
 }
