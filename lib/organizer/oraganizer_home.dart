@@ -33,8 +33,21 @@ class OrganizerHome extends StatelessWidget {
                     );
                   });
             } else {
-              return Text(
-                  "You haven't creaed any add pelase start create ad by pressing + icons");
+              return Center(
+                child: Container(
+                  width: 300,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                        "You haven't created any exhibition   start creating by pressing + icons"),
+                  ),
+                ),
+              );
             }
           } else {
             return Text("Loading");

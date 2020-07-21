@@ -38,10 +38,10 @@ class ExhibitionGuide extends StatelessWidget {
           '/organizerHome': (context) => OrganizerHome(),
           '/exhibitionHome': (context) => ExhibitionHome(),
           '/hallDetails': (context) => HallDetails(),
-          '/visitorNotificaitons':(context)=>VisitorNotifications()
+          '/visitorNotificaitons': (context) => VisitorNotifications()
         },
         debugShowCheckedModeBanner: false,
-        home: VisitorHome(),
+        home: StallDescription(),
       ),
     );
   }

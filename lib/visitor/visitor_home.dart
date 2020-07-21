@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:exhibition_guide/services/db_service.dart';
 import 'package:exhibition_guide/services/wifi_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -47,89 +48,103 @@ class _VisitorHomeState extends State<VisitorHome> {
             if (snapshot.data == ConnectivityResult.wifi) {
               return FutureBuilder<bool>(
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  if (snapshot.data) {
-                    return StreamBuilder<String>(
-                      builder: (BuildContext context,
-                          AsyncSnapshot<String> macdata) {
-                        if (macdata.hasData) {
-                          return Stack(
-                            children: <Widget>[
-                              Positioned(
-                                top: 50,
-                                left: 0,
-                                child: Container(
-                                  width: 150,
-                                  height: 250,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                  ),
-                                  child: Center(
-                                    child: RaisedButton(
-                                      textColor: Colors.white,
-                                      color: macdata.data == "7c:76:68:80:70:80"
-                                          ? Colors.green
-                                          : Colors.grey,
-                                      child: Text("A"),
-                                      onPressed: () {
-                                        Navigator.pushNamed(context, '/stall');
-                                      },
-                                      shape: CircleBorder(),
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.data) {
+                      return StreamBuilder<String>(
+                        builder: (BuildContext context,
+                            AsyncSnapshot<String> macdata) {
+                          if (macdata.hasData) {
+                            return Stack(
+                              children: <Widget>[
+                                Positioned(
+                                  top: 50,
+                                  left: 0,
+                                  child: Container(
+                                    width: 150,
+                                    height: 250,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black),
+                                    ),
+                                    child: Center(
+                                      child: RaisedButton(
+                                        textColor: Colors.white,
+                                        color:
+                                            macdata.data == "7c:76:68:80:70:80"
+                                                ? Colors.green
+                                                : Colors.grey,
+                                        child: Text("A"),
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                              context, '/stall');
+                                        },
+                                        shape: CircleBorder(),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Positioned(
-                                top: 150,
-                                right: 0,
-                                child: Container(
-                                  width: 150,
-                                  height: 250,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                  ),
-                                  child: Center(
-                                    child: RaisedButton(
-                                      textColor: Colors.white,
-                                      color: macdata.data == "90:61:0c:52:b5:2f"
-                                          ? Colors.green
-                                          : Colors.grey,
-                                      child: Text("B"),
-                                      onPressed: () {},
-                                      shape: CircleBorder(),
+                                Positioned(
+                                  top: 150,
+                                  right: 0,
+                                  child: Container(
+                                    width: 150,
+                                    height: 250,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        RaisedButton(
+                                          textColor: Colors.white,
+                                          color: macdata.data ==
+                                                  "90:61:0c:52:b5:2f"
+                                              ? Colors.green
+                                              : Colors.grey,
+                                          child: Text("B"),
+                                          onPressed: () {},
+                                          shape: CircleBorder(),
+                                        ),
+                                        macdata.data == "90:61:0c:52:b5:2f"
+                                            ? Text("You are here")
+                                            : Container()
+                                      ],
                                     ),
                                   ),
                                 ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                left: 0,
-                                child: Container(
-                                  width: 300,
-                                  height: 150,
-                                  child: Center(
-                                    child: RaisedButton(
-                                      textColor: Colors.white,
-                                      color: Colors.grey,
-                                      child: Text("C"),
-                                      onPressed: () {},
-                                      shape: CircleBorder(),
+                                Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  child: Container(
+                                    width: 300,
+                                    height: 150,
+                                    child: Center(
+                                      child: RaisedButton(
+                                        textColor: Colors.white,
+                                        color: Colors.grey,
+                                        child: Text("C"),
+                                        onPressed: () {},
+                                        shape: CircleBorder(),
+                                      ),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black),
                                     ),
                                   ),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                  ),
-                                ),
-                              )
-                            ],
-                          );
-                        } else {
-                          return Text("no data");
-                        }
-                      },
-                      stream: getStremWIFIBSD(),
-                    );
+                                )
+                              ],
+                            );
+                          } else {
+                            return Text("no data");
+                          }
+                        },
+                        stream: getStremWIFIBSD(),
+                      );
+                    } else {
+                      return Text("NO PERMISSION ALLOWD");
+                    }
                   } else {
-                    return Text("NO PERMISSION ALLOWD");
+                    return CircularProgressIndicator();
                   }
                 },
                 future: Permission.locationAlways.isGranted,

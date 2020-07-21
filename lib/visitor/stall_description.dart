@@ -47,7 +47,56 @@ class StallDescription extends StatelessWidget {
             Padding(
               padding:
                   const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
-              child: Text('Bawa'),
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    'Stalls in this Hall',
+                    style: TextStyle(fontWeight: FontWeight.w100, fontSize: 30),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      decoration: BoxDecoration(
+                          color: Colors.lightBlueAccent,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Gamage Book shop",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400, fontSize: 30),
+                          ),
+                          Text("tel: 033227474109")
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      decoration: BoxDecoration(
+                          color: Colors.lightBlueAccent,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Nimal Book shop",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400, fontSize: 30),
+                          ),
+                          Text("tel: 033227474109")
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

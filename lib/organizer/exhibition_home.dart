@@ -19,28 +19,11 @@ class _ExhibitionHomeState extends State<ExhibitionHome> {
       body: Stack(
         children: <Widget>[
           BuildHall(
-              hall: Hall(hallName: "Hall A", exhibitionId: 4864),
-              top: 50,
-              left: 0),
-          Positioned(
+              hall: Hall(hallName: "A", exhibitionId: 4864), top: 50, left: 0),
+          BuildHall(
+            hall: Hall(hallName: "B", exhibitionId: 4864),
             top: 150,
-            right: 0,
-            child: Container(
-              width: 150,
-              height: 250,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-              ),
-              child: Center(
-                child: RaisedButton(
-                  textColor: Colors.white,
-                  color: Colors.grey,
-                  child: Text("B"),
-                  onPressed: () {},
-                  shape: CircleBorder(),
-                ),
-              ),
-            ),
+            left: 205,
           ),
           Positioned(
             bottom: 0,
@@ -118,7 +101,7 @@ class _BuildHallState extends State<BuildHall> {
                                   ),
                                   filled: true,
                                   hintStyle: TextStyle(color: Colors.grey[800]),
-                                  hintText: "Type in your text",
+                                  hintText: "Send messages to This Hall ...",
                                   fillColor: Colors.white70),
                             ),
                           ),
@@ -170,14 +153,62 @@ class _BuildHallState extends State<BuildHall> {
                     return RaisedButton(
                       padding: EdgeInsets.all(0),
                       textColor: Colors.white,
-                      color:
-                      provider.isMAcSetHall1 ? Colors.green : Colors.grey,
+                      color: hall.hallName == "A"
+                          ? provider.isMAcSetHall1 ? Colors.green : Colors.grey
+                          : provider.isMacSetHall2 ? Colors.green : Colors.grey,
                       child: Icon(Icons.wifi),
-                      onPressed: provider.isMAcSetHall1
+                      onPressed: hall.hallName == "A"
+                          ? provider.isMAcSetHall1
+                              ? () async {
+                                  bool result =
+                                      await _db.deleteMac(provider.hall1Mac);
+                                  provider.macDeSetHall1();
+                                  final sn = SnackBar(
+                                      content: Text("MAC has been removed"),
+                                      action: SnackBarAction(
+                                        label: 'Okay',
+                                        onPressed: () async {},
+                                      ));
+                                  Scaffold.of(context).showSnackBar(sn);
+                                }
+                              : () async {
+                                  ConnectivityResult result =
+                                      await Connectivity().checkConnectivity();
+                                  if (result == ConnectivityResult.wifi) {
+                                    Connectivity()
+                                        .getWifiBSSID()
+                                        .then((value) async {
+                                      hall.mac = value;
+
+                                      bool result = await _db.adMac(value);
+                                      provider.setHall1Mac(value);
+                                      provider.macSetHall1();
+                                      final sn = SnackBar(
+                                          content: Text(value.toString()),
+                                          action: SnackBarAction(
+                                            label: 'Okay',
+                                            onPressed: () async {},
+                                          ));
+                                      Scaffold.of(context).showSnackBar(sn);
+                                    });
+                        } else {
+                          setState(() {});
+                          final sn = SnackBar(
+                              content: Text(
+                                  'Please Connect To a  WIFI Router'),
+                              action: SnackBarAction(
+                                label: 'Okay',
+                                onPressed: () {
+                                  // Some code to undo the change.
+                                },
+                              ));
+                          Scaffold.of(context).showSnackBar(sn);
+                        }
+                      } : provider.isMacSetHall2
                           ? () async {
                         bool result =
-                        await _db.deleteMac(provider.hall1Mac);
-                        provider.macDeSetHall1();
+                        await _db.deleteMac(provider.hall2Mac);
+                        provider.macDeSetHall2();
                         final sn = SnackBar(
                             content: Text("MAC has been removed"),
                             action: SnackBarAction(
@@ -196,8 +227,8 @@ class _BuildHallState extends State<BuildHall> {
                             hall.mac = value;
 
                             bool result = await _db.adMac(value);
-                            provider.setHall1Mac(value);
-                            provider.macSetHall1();
+                            provider.setHall2Mac(value);
+                            provider.macSetHall2();
                             final sn = SnackBar(
                                 content: Text(value.toString()),
                                 action: SnackBarAction(
@@ -233,7 +264,12 @@ class _BuildHallState extends State<BuildHall> {
                   textColor: Colors.white,
                   color: Colors.blue,
                   child: Icon(Icons.edit),
-                  onPressed: value.isMAcSetHall1
+                  onPressed: hall.hallName == "A" ? value.isMAcSetHall1
+                      ? () {
+                    Navigator.pushNamed(context, '/hallDetails');
+//                      print("Called");
+                  }
+                      : null : value.isMacSetHall2
                       ? () {
                     Navigator.pushNamed(context, '/hallDetails');
 //                      print("Called");
@@ -250,7 +286,11 @@ class _BuildHallState extends State<BuildHall> {
                   textColor: Colors.white,
                   color: Colors.blue,
                   child: Icon(Icons.send),
-                  onPressed: value.isMAcSetHall1
+                  onPressed: hall.hallName == "A" ? value.isMAcSetHall1
+                      ? () async {
+                    await _openShowModalBottomSheet(context, value);
+                  }
+                      : null : value.isMacSetHall2
                       ? () async {
                     await _openShowModalBottomSheet(context, value);
                   }
@@ -262,7 +302,7 @@ class _BuildHallState extends State<BuildHall> {
             Consumer<ExhibitionHomeProvider>(
               builder: (BuildContext context, ExhibitionHomeProvider value,
                   Widget child) {
-                return Text("CROWD");
+                return Text("CROWD : " + 0.toString());
               },
             ),
           ],

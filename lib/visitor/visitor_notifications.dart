@@ -15,6 +15,9 @@ class _VisitorNotificationsState extends State<VisitorNotifications> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Notifications"),
+      ),
       body: StreamBuilder<String>(
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.hasData) {
@@ -40,11 +43,23 @@ class _VisitorNotificationsState extends State<VisitorNotifications> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.8,
                                   height: 100,
-                                  child: Center(
-                                      child: Text(
-                                    messageList.data[index].message,
-                                    style: TextStyle(color: Colors.white),
-                                  ))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          messageList.data[index].message,
+                                          softWrap: true,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        Text(
+                                            DateTime.fromMicrosecondsSinceEpoch(
+                                                    messageList.data[index].time
+                                                        .microsecondsSinceEpoch)
+                                                .toString())
+                                      ],
+                                    ),
+                                  )),
                             );
                           },
                         ),
@@ -52,13 +67,13 @@ class _VisitorNotificationsState extends State<VisitorNotifications> {
                     ),
                   );
                 } else {
-                  return Center(child: Text("No notifications yet000"));
+                  return Center(child: Text("No notifications yet"));
                 }
               },
             );
           } else {
             return Center(
-              child: Text("You Haven't Connected to WIFI"),
+              child: CircularProgressIndicator(),
             );
           }
         },
